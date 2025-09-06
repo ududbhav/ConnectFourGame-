@@ -29,25 +29,23 @@ def print_board(board):
         print(row)
 
 def winning_move(board, piece):
-    # Horizontal
+    
     for r in range(ROWS):
         for c in range(COLUMNS - 3):
             if all(board[r][c + i] == piece for i in range(4)):
                 return True
 
-    # Vertical
+    
     for c in range(COLUMNS):
         for r in range(ROWS - 3):
             if all(board[r + i][c] == piece for i in range(4)):
                 return True
 
-    # Positive Diagonal
     for r in range(ROWS - 3):
         for c in range(COLUMNS - 3):
             if all(board[r + i][c + i] == piece for i in range(4)):
                 return True
 
-    # Negative Diagonal
     for r in range(3, ROWS):
         for c in range(COLUMNS - 3):
             if all(board[r - i][c + i] == piece for i in range(4)):
@@ -74,31 +72,26 @@ def evaluate_window(window, piece):
 def score_position(board, piece):
     score = 0
 
-    # Center column preference
     center_array = [board[r][COLUMNS // 2] for r in range(ROWS)]
     score += center_array.count(piece) * 3
 
-    # Horizontal score
     for r in range(ROWS):
         row_array = board[r]
         for c in range(COLUMNS - 3):
             window = row_array[c:c + WINDOW_LENGTH]
             score += evaluate_window(window, piece)
 
-    # Vertical score
     for c in range(COLUMNS):
         col_array = [board[r][c] for r in range(ROWS)]
         for r in range(ROWS - 3):
             window = col_array[r:r + WINDOW_LENGTH]
             score += evaluate_window(window, piece)
 
-    # Positive diagonal
     for r in range(ROWS - 3):
         for c in range(COLUMNS - 3):
             window = [board[r + i][c + i] for i in range(WINDOW_LENGTH)]
             score += evaluate_window(window, piece)
 
-    # Negative diagonal
     for r in range(3, ROWS):
         for c in range(COLUMNS - 3):
             window = [board[r - i][c + i] for i in range(WINDOW_LENGTH)]
@@ -140,7 +133,7 @@ def minimax(board, depth, maximizingPlayer):
                 best_col = col
         return best_col, value
 
-    else:  # Minimizing player
+    else:  
         value = math.inf
         best_col = random.choice(valid_locations)
         for col in valid_locations:
@@ -188,7 +181,7 @@ def play_game():
                 turn = AI
                 print_board(board)
 
-        else:  # AI Turn
+        else:  
             print("AI is thinking...")
             col, _ = minimax(board, 4, True)
             if is_valid_location(board, col):
@@ -206,10 +199,10 @@ def play_game():
                     print_board(board)
 
 
-        # Check draw
+       
         if not game_over and len(get_valid_locations(board)) == 0:
             print("🤝 It's a draw!")
             game_over = True
 
-# Call the game
+
 play_game()
