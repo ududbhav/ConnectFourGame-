@@ -37,22 +37,22 @@ def print_board(board):
     print(np.flip(board, 0))
 
 def winning_move(board, piece):
-    # Check horizontal
+    
     for c in range(COLUMN_COUNT - 3):
         for r in range(ROW_COUNT):
             if all(board[r][c+i] == piece for i in range(4)):
                 return True
-    # Check vertical
+   
     for c in range(COLUMN_COUNT):
         for r in range(ROW_COUNT - 3):
             if all(board[r+i][c] == piece for i in range(4)):
                 return True
-    # Check positive diagonals
+   
     for c in range(COLUMN_COUNT - 3):
         for r in range(ROW_COUNT - 3):
             if all(board[r+i][c+i] == piece for i in range(4)):
                 return True
-    # Check negative diagonals
+   
     for c in range(COLUMN_COUNT - 3):
         for r in range(3, ROW_COUNT):
             if all(board[r-i][c+i] == piece for i in range(4)):
@@ -75,32 +75,32 @@ def evaluate_window(window, piece):
 
 def score_position(board, piece):
     score = 0
-    # Score center column
+    
     center_array = [int(i) for i in list(board[:, COLUMN_COUNT//2])]
     center_count = center_array.count(piece)
     score += center_count * 3
 
-    # Horizontal
+   
     for r in range(ROW_COUNT):
         row_array = [int(i) for i in list(board[r,:])]
         for c in range(COLUMN_COUNT - 3):
             window = row_array[c:c+WINDOW_LENGTH]
             score += evaluate_window(window, piece)
 
-    # Vertical
+    
     for c in range(COLUMN_COUNT):
         col_array = [int(i) for i in list(board[:,c])]
         for r in range(ROW_COUNT - 3):
             window = col_array[r:r+WINDOW_LENGTH]
             score += evaluate_window(window, piece)
 
-    # Positive Diagonal
+    
     for r in range(ROW_COUNT - 3):
         for c in range(COLUMN_COUNT - 3):
             window = [board[r+i][c+i] for i in range(WINDOW_LENGTH)]
             score += evaluate_window(window, piece)
 
-    # Negative Diagonal
+
     for r in range(3, ROW_COUNT):
         for c in range(COLUMN_COUNT - 3):
             window = [board[r-i][c+i] for i in range(WINDOW_LENGTH)]
@@ -168,11 +168,10 @@ def draw_board(board):
                 pygame.draw.circle(screen, YELLOW, (int(c*SQUARESIZE+SQUARESIZE/2), height - int(r*SQUARESIZE+SQUARESIZE/2)), RADIUS)
     pygame.display.update()
 
-# ----- Pygame Setup -----
 pygame.init()
 SQUARESIZE = 100
 width = COLUMN_COUNT * SQUARESIZE
-height = (ROW_COUNT + 1) * SQUARESIZE  # Extra row for showing text
+height = (ROW_COUNT + 1) * SQUARESIZE  
 
 size = (width, height)
 RADIUS = int(SQUARESIZE/2 - 5)
@@ -187,7 +186,7 @@ pygame.display.update()
 game_over = False
 turn = random.randint(PLAYER, AI)
 
-# ----- Main Loop -----
+
 while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
